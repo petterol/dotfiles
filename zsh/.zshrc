@@ -56,6 +56,17 @@ elif ls -G > /dev/null 2>&1; then
 fi
 
 # ---------------------
+# Completion
+# ---------------------
+
+autoload -Uz compinit
+compinit
+
+zstyle ':completion:*' menu select
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+
+# ---------------------
 # Path Customization
 # ---------------------
 
