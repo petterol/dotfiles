@@ -80,3 +80,9 @@ export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
+
+# ---------------------
+# Local Additions
+# ---------------------
+
+[ -f "$HOME/.zshrc_local" ] && source "$HOME/.zshrc_local"
