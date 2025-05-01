@@ -74,6 +74,12 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
 
 # ---------------------
+# fzf
+# ---------------------
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# ---------------------
 # Pyenv
 # ---------------------
 
@@ -82,15 +88,16 @@ export PYENV_ROOT="$HOME/.pyenv"
 eval "$(pyenv init -)"
 
 # ---------------------
-# Edit-command-line
+# Edit-Command-Line
 # ---------------------
 
 autoload -z edit-command-line
 zle -N edit-command-line
-bindkey "^X^E" edit-command-line
+bindkey "^X^E" edit-command-line # type command in vim
 
 # ---------------------
 # Local Additions
 # ---------------------
 
 [ -f "$HOME/.zshrc_local" ] && source "$HOME/.zshrc_local"
+
