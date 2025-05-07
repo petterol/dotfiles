@@ -1,0 +1,9 @@
+[alias]
+    lg = log --graph --oneline --decorate --all
+
+# ---------------------
+# Local Additions
+# ---------------------
+
+[include]
+    path = $HOME/.gitconfig_local
