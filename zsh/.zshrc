@@ -35,8 +35,8 @@ setopt HIST_FIND_NO_DUPS       # Avoid showing duplicates when searching history
 setopt HIST_EXPIRE_DUPS_FIRST  # Expire older duplicate entries first when trimming
 setopt HIST_REDUCE_BLANKS      # Remove superfluous blanks
 setopt HIST_VERIFY             # Don’t execute history lines immediately
-# setopt SHARE_HISTORY           # Share history across all sessions
-# setopt INC_APPEND_HISTORY      # Add commands to history immediately
+setopt SHARE_HISTORY           # Share history across all sessions
+setopt INC_APPEND_HISTORY      # Add commands to history immediately
 setopt APPEND_HISTORY          # Append to history, don't overwrite
 
 # History file config
