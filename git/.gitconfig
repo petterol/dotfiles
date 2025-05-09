@@ -6,4 +6,4 @@
 # ---------------------
 
 [include]
-    path = $HOME/.gitconfig_local
+    path = ~/.gitconfig.local
