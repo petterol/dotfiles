@@ -27,17 +27,22 @@ export VISUAL=$EDITOR
 # Allow comments in interactive shell
 setopt INTERACTIVE_COMMENTS
 
-# Show command you typed in the command history
+# https://postgresqlstan.github.io/cli/zsh-history-options/
+setopt EXTENDED_HISTORY        # Include timestamp
+setopt HIST_REDUCE_BLANKS      # Remove superfluous blanks
+setopt HIST_VERIFY             # Don’t execute history lines immediately (expand line without executing it)
 setopt HIST_IGNORE_SPACE       # Ignore commands that start with a space
+
 setopt HIST_IGNORE_DUPS        # Don't store a command if it's the same as the previous one
 # setopt HIST_IGNORE_ALL_DUPS    # Don't store any duplicate commands at all
-setopt HIST_FIND_NO_DUPS       # Avoid showing duplicates when searching history
 setopt HIST_EXPIRE_DUPS_FIRST  # Expire older duplicate entries first when trimming
-setopt HIST_REDUCE_BLANKS      # Remove superfluous blanks
-setopt HIST_VERIFY             # Don’t execute history lines immediately
-setopt SHARE_HISTORY           # Share history across all sessions
-setopt INC_APPEND_HISTORY      # Add commands to history immediately
+setopt HIST_FIND_NO_DUPS       # Avoid showing duplicates when searching history
+
+# APPEND_HISTORY without SHARE_HISTORY lets all shells immediately write to the history file,
+# 	but other shells do not read those entries until they restart (or run `fc -R`)
+# setopt SHARE_HISTORY           # Share history across all sessions (re-read continously from $HISTFILE)
 setopt APPEND_HISTORY          # Append to history, don't overwrite
+setopt INC_APPEND_HISTORY      # Append commands to history immediately
 
 # History file config
 HISTFILE=~/.zsh_history
