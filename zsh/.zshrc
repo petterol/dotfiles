@@ -1,26 +1,44 @@
-# ---------------------
-# Prompt
-# ---------------------
+# ==========================================================
+# 0. Early setup: environment basics
+# ==========================================================
 
+export SHELL=/bin/zsh
+export EDITOR=vim
+export VISUAL=$EDITOR
+
+# Platform detection (used later)
+case "$OSTYPE" in
+  darwin*)  platform="macOS" ;;
+  linux*)   platform="Linux" ;;
+  msys*|cygwin*|win*) platform="Windows" ;;
+  *)        platform="Unknown" ;;
+esac
+
+# ==========================================================
+# 1. Path configuration
+# ==========================================================
+
+export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
+
+# ==========================================================
+# 2. Prompt and plugin loading
+# ==========================================================
+
+# --- Pure prompt ---
 fpath+=($HOME/.zsh/pure)
 autoload -U promptinit; promptinit
 prompt pure
 
+# --- Plugin loading (order matters!) ---
+# Load autosuggestions before syntax highlighting
 source $HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-# ---------------------
-# Basic Settings
-# ---------------------
+# ==========================================================
+# 3. History configuration
+# ==========================================================
 
-export SHELL=/bin/zsh
-export EDITOR=vim  # Change to vim, nano, code, etc. as you like
-export VISUAL=$EDITOR
-
-# Allow comments in interactive shell
-setopt INTERACTIVE_COMMENTS
-
-# https://postgresqlstan.github.io/cli/zsh-history-options/
+setopt INTERACTIVE_COMMENTS    # Allow comments in interactive shell
 setopt EXTENDED_HISTORY        # Include timestamp
 setopt HIST_REDUCE_BLANKS      # Remove superfluous blanks
 setopt HIST_VERIFY             # Don’t execute history lines immediately (expand line without executing it)
@@ -42,60 +60,91 @@ HISTFILE=~/.zsh_history
 HISTSIZE=50000
 SAVEHIST=50000
 
+# ===============================
+# Aliases
+# ===============================
 
-# ---------------------
-# Alias
-# ---------------------
-
-if ls --color=auto > /dev/null 2>&1; then
-    alias ls='ls --color=auto'
-elif ls -G > /dev/null 2>&1; then
-	    alias ls='ls -G'
+if [[ "$platform" == "macOS" ]]; then
+  alias ll='ls -halG'
+elif [[ "$platform" == "Linux" ]]; then
+  alias ll='ls -hal --color=auto'
 fi
 
-# ---------------------
-# Completion
-# ---------------------
+# ==========================================================
+# 5. Completion system
+# ==========================================================
 
 autoload -Uz compinit
-compinit
+# Use a compiled completion dump for speed (cache)
+if [[ -n ~/.zcompdump ]]; then
+  compinit -C
+else
+  compinit
+fi
 
 zstyle ':completion:*' menu select
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
-# ---------------------
-# Path Customization
-# ---------------------
+# ==========================================================
+# 6. Integrations (fzf, pyenv, etc.)
+# ==========================================================
 
-# Add custom bin folders to your PATH
-export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
-
-# ---------------------
-# fzf
-# ---------------------
-
+# --- fzf integration ---
+# Should come after compinit and plugin loading
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# ---------------------
-# Pyenv
-# ---------------------
-
+# --- Pyenv ---
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
-# ---------------------
-# Edit-Command-Line
-# ---------------------
+# # ==========================================================
+# # 7. Edit Command Line
+# # ==========================================================
 
-autoload -z edit-command-line
+autoload -Uz edit-command-line
 zle -N edit-command-line
-bindkey "^X^E" edit-command-line # type command in vim
+bindkey "^X^E" edit-command-line  # Ctrl+X Ctrl+E → edit current command
 
-# ---------------------
-# Local Additions
-# ---------------------
+# ===============================
+# 8. Keybindings (universal)
+# ===============================
 
-[ -f "$HOME/.zshrc_local" ] && source "$HOME/.zshrc_local"
+# Use emacs-style keybindings (default for most)
+bindkey -e
 
+# --- Word navigation (Alt/Option + ← →) ---
+# Meta-b / Meta-f are the standard escape sequences for these
+bindkey '^[b' backward-word   # Alt/Option + Left
+bindkey '^[f' forward-word    # Alt/Option + Right
+
+
+# --- Word deletion (Alt/Option + ⌫ / d) ---
+# Meta-Delete or Meta-Backspace → delete previous word
+bindkey '^[^?' backward-kill-word  # Option + Backspace / Alt + Backspace
+# Meta-d → delete next word
+bindkey '^[d' kill-word            # Option + d / Alt + d
+
+# --- Line start / end / delete ---
+bindkey '^A' beginning-of-line     # Ctrl + A
+bindkey '^E' end-of-line           # Ctrl + E
+bindkey '^U' backward-kill-line    # Ctrl + U (delete to line start)
+bindkey '^K' kill-line             # Ctrl + K (delete to line end)
+
+# --- Command history (works by default) ---
+bindkey '^P' up-line-or-history    # Ctrl + P = previous command
+bindkey '^N' down-line-or-history  # Ctrl + N = next command
+
+# --- Optional: case-insensitive tab completion ---
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+
+# ==========================================================
+# 9. Local overrides (optional)
+# ==========================================================
+
+# For machine-specific or private config
+if [[ -f "${HOME}/.zshrc_local" ]]; then
+  source "${HOME}/.zshrc_local"
+fi
