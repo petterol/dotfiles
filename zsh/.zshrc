@@ -112,33 +112,8 @@ bindkey "^X^E" edit-command-line  # Ctrl+X Ctrl+E → edit current command
 # 8. Keybindings (universal)
 # ===============================
 
-# Use emacs-style keybindings (default for most)
+# Use emacs-style keybindings (required if $EDITOR=vim or $VISUAL=vim)
 bindkey -e
-
-# --- Word navigation (Alt/Option + ← →) ---
-# Meta-b / Meta-f are the standard escape sequences for these
-bindkey '^[b' backward-word   # Alt/Option + Left
-bindkey '^[f' forward-word    # Alt/Option + Right
-
-
-# --- Word deletion (Alt/Option + ⌫ / d) ---
-# Meta-Delete or Meta-Backspace → delete previous word
-bindkey '^[^?' backward-kill-word  # Option + Backspace / Alt + Backspace
-# Meta-d → delete next word
-bindkey '^[d' kill-word            # Option + d / Alt + d
-
-# --- Line start / end / delete ---
-bindkey '^A' beginning-of-line     # Ctrl + A
-bindkey '^E' end-of-line           # Ctrl + E
-bindkey '^U' backward-kill-line    # Ctrl + U (delete to line start)
-bindkey '^K' kill-line             # Ctrl + K (delete to line end)
-
-# --- Command history (works by default) ---
-bindkey '^P' up-line-or-history    # Ctrl + P = previous command
-bindkey '^N' down-line-or-history  # Ctrl + N = next command
-
-# --- Optional: case-insensitive tab completion ---
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
 # ==========================================================
 # 9. Local overrides (optional)
