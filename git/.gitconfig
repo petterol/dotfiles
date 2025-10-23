@@ -1,5 +1,6 @@
 [alias]
-    lg = log --graph --oneline --decorate --all
+    lgb = log --graph --decorate --pretty=format:'%C(auto)%h%d%Creset %s %C(green)%cr%Creset'
+    lg = lgb --all
 
 # ---------------------
 # Local Additions
